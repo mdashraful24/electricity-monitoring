@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Electricity Monitor and Control Dashboard</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- header with status -->
+        <div class="top-bar">
+            <h1><i class="fas fa-bolt" style="color: #2563eb; margin-right: 10px;"></i>SmartElec<span
+                    style="font-weight:300;">·</span>dash</h1>
+            <div class="status-badge"><i class="fas fa-circle" style="font-size: 0.6rem;"></i> ONLINE · realtime</div>
+        </div>
+
+        <!-- limits cards -->
+        <div class="limits-grid">
+            <div class="limit-card">
+                <div class="limit-icon"><i class="fas fa-bolt"></i></div>
+                <div class="limit-content">
+                    <h3>Voltage safe range</h3>
+                    <div class="value">200V – 250V</div>
+                </div>
+            </div>
+            <div class="limit-card">
+                <div class="limit-icon"><i class="fas fa-gauge-high"></i></div>
+                <div class="limit-content">
+                    <h3>Power limit</h3>
+                    <div class="value">1000 W <span style="font-size:0.9rem;">(max)</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- relay control area -->
+        <div class="relay-panel">
+            <h2><i class="fas fa-microchip" style="color:#2563eb;"></i> Relay command center</h2>
+            <div class="relay-grid">
+                <div class="main-relay-item">
+                    <i class="fas fa-power-off" style="color:#2563eb; font-size:1.6rem;"></i>
+                    <div class="toggle-switch">
+                        <span style="font-weight:600;">Main relay</span>
+                        <label class="switch">
+                            <input type="checkbox" id="mainRelay" checked>
+                            <span class="slider-round"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="loads-group">
+                    <div class="toggle-switch"><span>Load 1</span>
+                        <label class="switch"><input type="checkbox" id="relay1" class="sub-relay" disabled><span
+                                class="slider-round"></span></label>
+                    </div>
+                    <div class="toggle-switch"><span>Load 2</span>
+                        <label class="switch"><input type="checkbox" id="relay2" class="sub-relay" disabled><span
+                                class="slider-round"></span></label>
+                    </div>
+                    <div class="toggle-switch"><span>Load 3</span>
+                        <label class="switch"><input type="checkbox" id="relay3" class="sub-relay" disabled><span
+                                class="slider-round"></span></label>
+                    </div>
+                    <div class="toggle-switch"><span>Load 4</span>
+                        <label class="switch"><input type="checkbox" id="relay4" class="sub-relay" disabled><span
+                                class="slider-round"></span></label>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 1.2rem;"><span class="badge-icon"><i class="far fa-clock"></i> main relay enables
+                    sub-loads</span></div>
+        </div>
+
+        <!-- live stats cards -->
+        <div class="stats-grid" id="liveStats">
+            <div class="stat-card">
+                <div class="stat-header"><i class="fas fa-chart-line"></i> Latest voltage</div>
+                <div class="stat-value" id="liveVoltage">0 <span class="stat-unit">V</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header"><i class="fas fa-water"></i> Latest current</div>
+                <div class="stat-value" id="liveAmpere">0.00 <span class="stat-unit">A</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header"><i class="fas fa-bolt"></i> Latest power</div>
+                <div class="stat-value" id="livePower">0 <span class="stat-unit">W</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header"><i class="fas fa-wave-square"></i> Frequency</div>
+                <div class="stat-value" id="liveFrequency">50.0 <span class="stat-unit">Hz</span></div>
+            </div>
+        </div>
+
+        <!-- graphs row -->
+        <div class="graphs-row">
+            <div class="graph-card">
+                <h3><i class="fas fa-chart-simple" style="color:#2563eb;"></i> Voltage (V) · last readings</h3>
+                <canvas id="voltageGraph" class="graph-canvas"></canvas>
+            </div>
+            <div class="graph-card">
+                <h3><i class="fas fa-chart-simple" style="color:#2563eb;"></i> Current (A) · last readings</h3>
+                <canvas id="ampereGraph" class="graph-canvas"></canvas>
+            </div>
+            <div class="graph-card">
+                <h3><i class="fas fa-chart-simple" style="color:#2563eb;"></i> Power (W) · last readings</h3>
+                <canvas id="powerGraph" class="graph-canvas"></canvas>
+            </div>
+        </div>
+
+        <!-- data table -->
+        <div class="table-wrapper">
+            <h2><i class="fas fa-table"></i> Historical & live data</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>SL</th>
+                        <th>Time & date</th>
+                        <th>Voltage</th>
+                        <th>Power</th>
+                        <th>Ampere</th>
+                        <th>Frequency</th>
+                        <th>Power factor</th>
+                        <th>Energy</th>
+                        <th>Main relay</th>
+                        <th>Relay 01</th>
+                        <th>Relay 02</th>
+                        <th>Relay 03</th>
+                        <th>Relay 04</th>
+                    </tr>
+                </thead>
+                <tbody id="dataTableBody">
+                    <!-- populated via js -->
+                </tbody>
+            </table>
+        </div>
+        <div class="footer-note"><i class="far fa-heart" style="color:#2563eb;"></i> smart monitoring · values update
+            every 2s (demo)</div>
+    </div>
+
+    <!-- Custom JavaScript -->
+    <script src="js/script.js"></script>
+</body>
+
+</html>
