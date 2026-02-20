@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ========== LIVE DATA - CHOOSE ONE OPTION ==========
 
     // OPTION A: SIMULATION MODE (comment this out when connecting to server)
-    /*
+    
     // DOM elements for live stats
     const liveVoltageEl = document.getElementById('liveVoltage');
     const liveAmpereEl = document.getElementById('liveAmpere');
@@ -250,97 +250,97 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let i = 0; i < 5; i++) {
         setTimeout(() => updateDashboard(), i * 300);
     }
-    */
+    
 
-    // OPTION B: REAL SERVER DATA (UNCOMMENT THIS FOR SERVER CONNECTION)
+    // // OPTION B: REAL SERVER DATA (UNCOMMENT THIS FOR SERVER CONNECTION)
 
-    // DOM elements for live stats
-    const liveVoltageEl = document.getElementById('liveVoltage');
-    const liveAmpereEl = document.getElementById('liveAmpere');
-    const livePowerEl = document.getElementById('livePower');
-    const liveFreqEl = document.getElementById('liveFrequency');
-    const tableBody = document.getElementById('dataTableBody');
+    // // DOM elements for live stats
+    // const liveVoltageEl = document.getElementById('liveVoltage');
+    // const liveAmpereEl = document.getElementById('liveAmpere');
+    // const livePowerEl = document.getElementById('livePower');
+    // const liveFreqEl = document.getElementById('liveFrequency');
+    // const tableBody = document.getElementById('dataTableBody');
 
-    // Fetch real data from server
-    function fetchServerData() {
-        fetch('http://localhost/electricity_monitoring/api/fetch_sensor_data.php')
-            .then(response => response.json())
-            .then(data => {
-                // Update live stats with real data
-                liveVoltageEl.innerHTML = `${data.voltage} <span class="stat-unit">V</span>`;
-                liveAmpereEl.innerHTML = `${data.current} <span class="stat-unit">A</span>`;
-                livePowerEl.innerHTML = `${data.power} <span class="stat-unit">W</span>`;
-                liveFreqEl.innerHTML = `${data.frequency} <span class="stat-unit">Hz</span>`;
+    // // Fetch real data from server
+    // function fetchServerData() {
+    //     fetch('http://localhost/electricity_monitoring/api/fetch_sensor_data.php')
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             // Update live stats with real data
+    //             liveVoltageEl.innerHTML = `${data.voltage} <span class="stat-unit">V</span>`;
+    //             liveAmpereEl.innerHTML = `${data.current} <span class="stat-unit">A</span>`;
+    //             livePowerEl.innerHTML = `${data.power} <span class="stat-unit">W</span>`;
+    //             liveFreqEl.innerHTML = `${data.frequency} <span class="stat-unit">Hz</span>`;
 
-                // Update charts
-                const now = new Date();
-                const timeLabel = now.toLocaleTimeString('en-US', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit'
-                });
+    //             // Update charts
+    //             const now = new Date();
+    //             const timeLabel = now.toLocaleTimeString('en-US', {
+    //                 hour: '2-digit',
+    //                 minute: '2-digit',
+    //                 second: '2-digit'
+    //             });
 
-                [voltageChart, ampereChart, powerChart].forEach(chart => {
-                    if (chart.data.labels.length > 15) {
-                        chart.data.labels.shift();
-                        chart.data.datasets[0].data.shift();
-                    }
-                });
+    //             [voltageChart, ampereChart, powerChart].forEach(chart => {
+    //                 if (chart.data.labels.length > 15) {
+    //                     chart.data.labels.shift();
+    //                     chart.data.datasets[0].data.shift();
+    //                 }
+    //             });
 
-                voltageChart.data.labels.push(timeLabel);
-                voltageChart.data.datasets[0].data.push(data.voltage);
+    //             voltageChart.data.labels.push(timeLabel);
+    //             voltageChart.data.datasets[0].data.push(data.voltage);
 
-                ampereChart.data.labels.push(timeLabel);
-                ampereChart.data.datasets[0].data.push(data.current);
+    //             ampereChart.data.labels.push(timeLabel);
+    //             ampereChart.data.datasets[0].data.push(data.current);
 
-                powerChart.data.labels.push(timeLabel);
-                powerChart.data.datasets[0].data.push(data.power);
+    //             powerChart.data.labels.push(timeLabel);
+    //             powerChart.data.datasets[0].data.push(data.power);
 
-                voltageChart.update();
-                ampereChart.update();
-                powerChart.update();
+    //             voltageChart.update();
+    //             ampereChart.update();
+    //             powerChart.update();
 
-                // Add row to table
-                const fullTimeStr = now.toLocaleTimeString() + ' ' +
-                    now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+    //             // Add row to table
+    //             const fullTimeStr = now.toLocaleTimeString() + ' ' +
+    //                 now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
 
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${tableBody.children.length + 1}</td>
-                    <td>${fullTimeStr}</td>
-                    <td>${data.voltage} V</td>
-                    <td>${data.power} W</td>
-                    <td>${data.current} A</td>
-                    <td>${data.frequency} Hz</td>
-                    <td>${data.power_factor || '0.95'}</td>
-                    <td>${data.energy || '0.00'} kWh</td>
-                    <td>${mainRelay.checked ? 'ON' : 'OFF'}</td>
-                    <td>${document.getElementById('relay1').checked ? 'ON' : 'OFF'}</td>
-                    <td>${document.getElementById('relay2').checked ? 'ON' : 'OFF'}</td>
-                    <td>${document.getElementById('relay3').checked ? 'ON' : 'OFF'}</td>
-                    <td>${document.getElementById('relay4').checked ? 'ON' : 'OFF'}</td>
-                `;
+    //             const row = document.createElement('tr');
+    //             row.innerHTML = `
+    //                 <td>${tableBody.children.length + 1}</td>
+    //                 <td>${fullTimeStr}</td>
+    //                 <td>${data.voltage} V</td>
+    //                 <td>${data.power} W</td>
+    //                 <td>${data.current} A</td>
+    //                 <td>${data.frequency} Hz</td>
+    //                 <td>${data.power_factor || '0.95'}</td>
+    //                 <td>${data.energy || '0.00'} kWh</td>
+    //                 <td>${mainRelay.checked ? 'ON' : 'OFF'}</td>
+    //                 <td>${document.getElementById('relay1').checked ? 'ON' : 'OFF'}</td>
+    //                 <td>${document.getElementById('relay2').checked ? 'ON' : 'OFF'}</td>
+    //                 <td>${document.getElementById('relay3').checked ? 'ON' : 'OFF'}</td>
+    //                 <td>${document.getElementById('relay4').checked ? 'ON' : 'OFF'}</td>
+    //             `;
 
-                tableBody.prepend(row);
+    //             tableBody.prepend(row);
 
-                // Keep only last 8 rows
-                while (tableBody.children.length > 8) {
-                    tableBody.removeChild(tableBody.lastChild);
-                }
-            })
-            .catch(err => {
-                console.error('API error:', err);
-                // Optional: Show error message on dashboard
-                document.querySelector('.status-badge').innerHTML =
-                    '<i class="fas fa-exclamation-triangle" style="color: #f59e0b;"></i> CONNECTION ERROR';
-            });
-    }
+    //             // Keep only last 8 rows
+    //             while (tableBody.children.length > 8) {
+    //                 tableBody.removeChild(tableBody.lastChild);
+    //             }
+    //         })
+    //         .catch(err => {
+    //             console.error('API error:', err);
+    //             // Optional: Show error message on dashboard
+    //             document.querySelector('.status-badge').innerHTML =
+    //                 '<i class="fas fa-exclamation-triangle" style="color: #f59e0b;"></i> CONNECTION ERROR';
+    //         });
+    // }
 
-    // Fetch data every 2 seconds
-    setInterval(fetchServerData, 2000);
+    // // Fetch data every 2 seconds
+    // setInterval(fetchServerData, 2000);
 
-    // Initial fetch
-    fetchServerData();
+    // // Initial fetch
+    // fetchServerData();
 
     // ========== UTILITY FUNCTIONS ==========
     // Check online status
